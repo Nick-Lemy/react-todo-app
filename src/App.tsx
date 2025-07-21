@@ -1,15 +1,33 @@
 import { useReducer, useState } from "react";
 import { PlusCircleIcon } from "lucide-react";
 
-const ACTIONS = {
+type action = "add-todo" | "remove-todo" | "complete-todo";
+const ACTIONS: {
+  ADD_TODO: action;
+  REMOVE_TODO: action;
+  COMPLETE_TODO: action;
+} = {
   ADD_TODO: "add-todo",
   REMOVE_TODO: "remove-todo",
   COMPLETE_TODO: "complete-todo",
 };
-function reducer(todos, action) {
+
+interface Todo {
+  id: number;
+  title: string;
+  completed: boolean;
+}
+
+type Payload = { newTodo?: Todo; id?: number };
+
+type CounterAction = { type: action; payload: Payload };
+
+function reducer(todos: Todo[], action: CounterAction): Todo[] {
   switch (action.type) {
     case ACTIONS.ADD_TODO:
-      return [...todos, action.payload.newTodo];
+      if (todos && action.payload.newTodo)
+        return [...todos, action.payload.newTodo];
+      return todos;
 
     case ACTIONS.REMOVE_TODO: {
       const indexOfElem = todos.findIndex(
@@ -39,56 +57,13 @@ function reducer(todos, action) {
       return todos;
   }
 }
-
 function App() {
   const [todos, dispatch] = useReducer(reducer, []);
   const [newTodo, setNewTodo] = useState("");
 
   return (
     <>
-      <div>
-        {todos && (
-          <div className=" flex flex-col gap-2">
-            {todos.map((todo) => (
-              <div
-                key={todo.id}
-                className="bg-green-400 items-center text-3xl flex justify-between text-white"
-              >
-                <p className={todo.completed ? "line-through" : ""}>
-                  {todo.title}
-                </p>
-                <div className="flex gap-2">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      dispatch({
-                        type: ACTIONS.REMOVE_TODO,
-                        payload: { id: todo.id },
-                      });
-                      console.log(todos);
-                    }}
-                    className="bg-red-400 text-4xl py2 px-3 text-center"
-                  >
-                    x
-                  </button>
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      dispatch({
-                        type: ACTIONS.COMPLETE_TODO,
-                        payload: { id: todo.id },
-                      });
-                      console.log(todos);
-                    }}
-                    className="bg-gray-400 text-4xl py2 px-3 text-center"
-                  >
-                    v
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+      <div className="flex flex-col gap-8">
         <form
           className="flex items-center"
           onSubmit={(e) => {
@@ -115,9 +90,58 @@ function App() {
             <PlusCircleIcon />
           </button>
         </form>
+
+        {todos && (
+          <div className=" flex flex-col gap-2">
+            {todos.map((todo) => (
+              <TodoCard key={todo.id} dispatch={dispatch} todo={todo} />
+            ))}
+          </div>
+        )}
       </div>
     </>
   );
 }
 
 export default App;
+
+function TodoCard({
+  todo,
+  dispatch,
+}: {
+  todo: Todo;
+  dispatch: ({ type, payload }: CounterAction) => void;
+}) {
+  return (
+    <div
+      key={todo.id}
+      className="bg-green-400 items-center text-3xl flex justify-between text-white"
+    >
+      <p className={todo.completed ? "line-through" : ""}>{todo.title}</p>
+      <div className="flex gap-2">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch({
+              type: ACTIONS.REMOVE_TODO,
+              payload: { id: todo.id },
+            });
+          }}
+        >
+          x
+        </button>
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch({
+              type: ACTIONS.COMPLETE_TODO,
+              payload: { id: todo.id },
+            });
+          }}
+        >
+          v
+        </button>
+      </div>
+    </div>
+  );
+}
