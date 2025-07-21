@@ -1,6 +1,7 @@
 import { Circle, TrashIcon } from "lucide-react";
 import type { CounterAction, Todo } from "../utils/types";
 import { ACTIONS } from "../utils/utils";
+import CustomButtonIcon from "./CustomButtonIcon";
 
 export default function TodoCard({
   todo,
@@ -12,32 +13,26 @@ export default function TodoCard({
   return (
     <div
       key={todo.id}
-      className=" items-center justify-between text-xl flex w-full text-white"
+      className=" items-center px-6 md:px-0 justify-between text-xl flex w-full text-white"
     >
       <div className="flex gap-10 justify-center items-center">
-        <Circle
+        <CustomButtonIcon
           className={`${
             todo.completed ? "**:fill-green-500 rounded-full" : " "
           }`}
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch({
-              type: ACTIONS.COMPLETE_TODO,
-              payload: { id: todo.id },
-            });
-          }}
+          Icon={Circle}
+          actionType={ACTIONS.COMPLETE_TODO}
+          dispatch={dispatch}
+          todoId={todo.id}
         />
         <p className={todo.completed ? "line-through" : ""}>{todo.title}</p>
       </div>
-      <TrashIcon
+      <CustomButtonIcon
         className="text-red-400"
-        onClick={(e) => {
-          e.preventDefault();
-          dispatch({
-            type: ACTIONS.REMOVE_TODO,
-            payload: { id: todo.id },
-          });
-        }}
+        Icon={TrashIcon}
+        dispatch={dispatch}
+        todoId={todo.id}
+        actionType={ACTIONS.REMOVE_TODO}
       />
     </div>
   );
