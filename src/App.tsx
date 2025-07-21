@@ -69,7 +69,7 @@ function App() {
           App
         </h1>
         <form
-          className="flex w-full flex-col md:flex-row py-10 gap-4 items-center"
+          className="flex w-full flex-col md:flex-row pt-10 pb-5 gap-4 items-center"
           onSubmit={(e) => {
             e.preventDefault();
             dispatch({
@@ -88,10 +88,10 @@ function App() {
             }}
             value={newTodo}
             type="text"
-            className="text-white border-1 py-1 px-5 w-full rounded-lg border-white"
+            className="text-white w-4/5 border-1 py-1 px-5 rounded-lg border-white"
           />
           <button
-            className="text-white text-[15px] font-semibold text-nowrap p-2 bg-blue-900 rounded-lg"
+            className="text-white md:w-1/5 hover:bg-blue-950 cursor-pointer text-[15px] font-semibold text-nowrap p-2 bg-blue-900 rounded-lg"
             type="submit"
           >
             Add Todo
@@ -99,7 +99,7 @@ function App() {
         </form>
 
         {todos && (
-          <div className=" flex flex-col gap-2">
+          <div className=" flex flex-col gap-6 md:gap-8">
             {todos.map((todo) => (
               <TodoCard key={todo.id} dispatch={dispatch} todo={todo} />
             ))}
