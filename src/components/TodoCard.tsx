@@ -13,9 +13,9 @@ export default function TodoCard({
   return (
     <div
       key={todo.id}
-      className=" items-center px-6 md:px-0 justify-between text-xl flex w-full text-white"
+      className=" items-center px-6 md:px-0 justify-between text-lg md:text-xl flex w-full text-white"
     >
-      <div className="flex gap-10 justify-center items-center">
+      <div className="flex gap-4 md:gap-8 justify-center items-center">
         <CustomButtonIcon
           className={`${
             todo.completed ? "**:fill-green-500 rounded-full" : " "
