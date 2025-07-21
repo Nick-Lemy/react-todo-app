@@ -1,5 +1,5 @@
 import { useReducer, useState } from "react";
-import { PlusCircleIcon } from "lucide-react";
+import { Circle, PlusCircleIcon, Trash2, TrashIcon } from "lucide-react";
 
 type action = "add-todo" | "remove-todo" | "complete-todo";
 const ACTIONS: {
@@ -26,7 +26,7 @@ function reducer(todos: Todo[], action: CounterAction): Todo[] {
   switch (action.type) {
     case ACTIONS.ADD_TODO:
       if (todos && action.payload.newTodo)
-        return [...todos, action.payload.newTodo];
+        return [action.payload.newTodo, ...todos];
       return todos;
 
     case ACTIONS.REMOVE_TODO: {
@@ -63,9 +63,13 @@ function App() {
 
   return (
     <>
-      <div className="flex flex-col gap-8">
+      <div className="flex px-5 flex-col max-w-5xl mx-auto gap-4">
+        <h1 className="text-5xl text-white text-center font-semibold">
+          Welcome to <br /> <span className="text-blue-900">Ultimate</span> Todo
+          App
+        </h1>
         <form
-          className="flex items-center"
+          className="flex w-full flex-col md:flex-row py-10 gap-4 items-center"
           onSubmit={(e) => {
             e.preventDefault();
             dispatch({
@@ -84,10 +88,13 @@ function App() {
             }}
             value={newTodo}
             type="text"
-            className="text-black border-2 rounded-lg border-black"
+            className="text-white border-1 py-1 px-5 w-full rounded-lg border-white"
           />
-          <button type="submit">
-            <PlusCircleIcon />
+          <button
+            className="text-white text-[15px] font-semibold text-nowrap p-2 bg-blue-900 rounded-lg"
+            type="submit"
+          >
+            Add Todo
           </button>
         </form>
 
@@ -115,22 +122,13 @@ function TodoCard({
   return (
     <div
       key={todo.id}
-      className="bg-green-400 items-center text-3xl flex justify-between text-white"
+      className=" items-center justify-between text-xl flex w-full text-white"
     >
-      <p className={todo.completed ? "line-through" : ""}>{todo.title}</p>
-      <div className="flex gap-2">
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            dispatch({
-              type: ACTIONS.REMOVE_TODO,
-              payload: { id: todo.id },
-            });
-          }}
-        >
-          x
-        </button>
-        <button
+      <div className="flex gap-10 justify-center items-center">
+        <Circle
+          className={`${
+            todo.completed ? "**:fill-green-500 rounded-full" : " "
+          }`}
           onClick={(e) => {
             e.preventDefault();
             dispatch({
@@ -138,9 +136,20 @@ function TodoCard({
               payload: { id: todo.id },
             });
           }}
-        >
-          v
-        </button>
+        />
+        <p className={todo.completed ? "line-through" : ""}>{todo.title}</p>
+      </div>
+      <div className=" flex  gap-2 items-center">
+        <TrashIcon
+          className="text-red-400"
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch({
+              type: ACTIONS.REMOVE_TODO,
+              payload: { id: todo.id },
+            });
+          }}
+        />
       </div>
     </div>
   );
