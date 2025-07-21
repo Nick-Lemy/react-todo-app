@@ -4,7 +4,7 @@ import Main from "./sections/Main";
 function App() {
   return (
     <>
-      <div className="flex px-5 flex-col max-w-5xl mx-auto gap-4">
+      <div className="flex flex-col max-w-5xl mx-auto gap-4">
         <Header />
         <Main />
       </div>
